@@ -1,0 +1,38 @@
+language: go
+
+env:
+  global:
+    - GO111MODULE=on
+    - PG_DEFAULT_CONN_URI=postgres://gopher:g0ph3R@localhost:5432/travis_ci_test?sslmode=disable
+    - PG_MIGRATIONS_FILE_PATH=$TRAVIS_BUILD_DIR/database/migrations
+
+go:
+  - 1.13.x
+
+services:
+  - postgresql
+
+# Only clone the most recent commit.
+git:
+  depth: 1
+
+notifications:
+  email: false
+
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $HOME/gopath/pkg/mod
+
+before_install:
+  - go mod download && go mod verify
+
+install: true
+
+before_script:
+  - psql -c "create database travis_ci_test;" -U postgres
+  - psql -c "create user gopher with password 'g0ph3R';" -U postgres
+  - psql -c "grant all privileges on database travis_ci_test to gopher;" -U postgres
+
+script:
+  - go run main.go

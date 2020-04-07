@@ -29,7 +29,7 @@ func (uri pgConnectionUri) dbName() string {
 }
 
 
-// Singleton to manage database connection pool
+// Wrapper to manage connection pool singletons
 type connectionPool struct {
     db  *sql.DB
 }
@@ -56,7 +56,7 @@ func newConnectionPool(connUri pgConnectionUri) *connectionPool {
     return &connectionPool{db}
 }
 
-
+// Singleton for default connection pool
 var pgDefaultConnPool *connectionPool
 var defaultOnce *sync.Once = new(sync.Once)
 

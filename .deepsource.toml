@@ -5,4 +5,4 @@ name = "go"
 enabled = true
 
   [analyzers.meta]
-  import_path = "github.com/abeerupadhyay/go-postgres-example"
+  import_root = "github.com/abeerupadhyay/go-postgres-example"
